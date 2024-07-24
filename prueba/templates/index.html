@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Predicción de Salario</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('https://static.vecteezy.com/system/resources/previews/006/464/891/non_2x/abstract-geometric-white-and-green-color-background-illustration-free-vector.jpg');
+            background-size: cover;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 900px;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+        }
+
+        .form-group {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .form-column {
+            width: 45%;
+        }
+
+        .form-column label {
+            display: block;
+            margin-top: 10px;
+        }
+
+        .form-column input[type="number"],
+        .form-column select {
+            width: calc(100% - 10px);
+            padding: 10px;
+            margin: 5px 0 10px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"],
+        input[type="button"] {
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover,
+        input[type="button"]:hover {
+            background-color: #45a049;
+        }
+
+        .error {
+            color: red;
+            font-size: 14px;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .result {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        .gif-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .gif-container img {
+            width: 150px;
+            height: auto;
+        }
+
+        @media (max-width: 600px) {
+            .form-group {
+                flex-direction: column;
+            }
+
+            .form-column {
+                width: 100%;
+            }
+        }
+    </style>
+    <script>
+        function resetForm() {
+            document.getElementById('prediction-form').reset();
+            document.getElementById('result-container').style.display = 'none';
+        }
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Predicción de Salario</h1>
+        <form id="prediction-form" action="/predict" method="post">
+            <div class="form-group">
+                <div class="form-column">
+                    <!-- Campos numéricos -->
+                    <label for="age">Edad (Ej: 35):</label>
+                    <input type="number" id="age" name="age" step="any" min="18" max="100" placeholder="35" required>
+
+                    <label for="fnlwgt">Peso Final de la Muestra (Ej: 77516):</label>
+                    <input type="number" id="fnlwgt" name="fnlwgt" step="any" placeholder="77516" required>
+
+                    <label for="education-num">N° Educación (Ej: 13):</label>
+                    <input type="number" id="education-num" name="education-num" step="any" min="1" max="20"
+                        placeholder="13" required>
+
+                    <label for="capital-gain">Plusvalía (Ej: 2174):</label>
+                    <input type="number" id="capital-gain" name="capital-gain" step="any" min="0" placeholder="2174"
+                        required>
+
+                    <label for="capital-loss">Pérdidas de capital (Ej: 0):</label>
+                    <input type="number" id="capital-loss" name="capital-loss" step="any" min="0" placeholder="0"
+                        required>
+
+                    <label for="hours-per-week">Horas semanales (Ej: 40):</label>
+                    <input type="number" id="hours-per-week" name="hours-per-week" step="any" min="1" max="100"
+                        placeholder="40" required>
+                </div>
+                <div class="form-column">
+                    <!-- Campos categóricos -->
+                    <label for="workclass">Clase de Trabajo:</label>
+                    <select id="workclass" name="workclass" required>
+                        <option value="Private">Private</option>
+                        <option value="Self-emp-not-inc">Self-emp-not-inc</option>
+                        <option value="Self-emp-inc">Self-emp-inc</option>
+                        <option value="Federal-gov">Federal-gov</option>
+                        <option value="Local-gov">Local-gov</option>
+                        <option value="State-gov">State-gov</option>
+                        <option value="Without-pay">Without-pay</option>
+                        <option value="Never-worked">Never-worked</option>
+                    </select>
+
+                    <label for="education">Nivel Educativo:</label>
+                    <select id="education" name="education" required>
+                        <option value="Bachelors">Bachelors</option>
+                        <option value="Some-college">Some-college</option>
+                        <option value="11th">11th</option>
+                        <option value="HS-grad">HS-grad</option>
+                        <option value="Prof-school">Prof-school</option>
+                        <option value="Assoc-acdm">Assoc-acdm</option>
+                        <option value="Assoc-voc">Assoc-voc</option>
+                        <option value="9th">9th</option>
+                        <option value="7th-8th">7th-8th</option>
+                        <option value="12th">12th</option>
+                        <option value="Masters">Masters</option>
+                        <option value="1st-4th">1st-4th</option>
+                        <option value="10th">10th</option>
+                        <option value="Doctorate">Doctorate</option>
+                        <option value="5th-6th">5th-6th</option>
+                        <option value="Preschool">Preschool</option>
+                    </select>
+
+                    <label for="marital-status">Estado Civil:</label>
+                    <select id="marital-status" name="marital-status" required>
+                        <option value="Married-civ-spouse">Married-civ-spouse</option>
+                        <option value="Divorced">Divorced</option>
+                        <option value="Never-married">Never-married</option>
+                        <option value="Separated">Separated</option>
+                        <option value="Widowed">Widowed</option>
+                        <option value="Married-spouse-absent">Married-spouse-absent</option>
+                        <option value="Married-AF-spouse">Married-AF-spouse</option>
+                    </select>
+
+                    <label for="occupation">Ocupación:</label>
+                    <select id="occupation" name="occupation" required>
+                        <option value="Tech-support">Tech-support</option>
+                        <option value="Craft-repair">Craft-repair</option>
+                        <option value="Other-service">Other-service</option>
+                        <option value="Sales">Sales</option>
+                        <option value="Exec-managerial">Exec-managerial</option>
+                        <option value="Prof-specialty">Prof-specialty</option>
+                        <option value="Handlers-cleaners">Handlers-cleaners</option>
+                        <option value="Machine-op-inspct">Machine-op-inspct</option>
+                        <option value="Adm-clerical">Adm-clerical</option>
+                        <option value="Farming-fishing">Farming-fishing</option>
+                        <option value="Transport-moving">Transport-moving</option>
+                        <option value="Priv-house-serv">Priv-house-serv</option>
+                        <option value="Protective-serv">Protective-serv</option>
+                        <option value="Armed-Forces">Armed-Forces</option>
+                    </select>
+
+                    <label for="relationship">Relación:</label>
+                    <select id="relationship" name="relationship" required>
+                        <option value="Wife">Wife</option>
+                        <option value="Own-child">Own-child</option>
+                        <option value="Husband">Husband</option>
+                        <option value="Not-in-family">Not-in-family</option>
+                        <option value="Other-relative">Other-relative</option>
+                        <option value="Unmarried">Unmarried</option>
+                    </select>
+
+                    <label for="race">Raza:</label>
+                    <select id="race" name="race" required>
+                        <option value="White">White</option>
+                        <option value="Asian-Pac-Islander">Asian-Pac-Islander</option>
+                        <option value="Amer-Indian-Eskimo">Amer-Indian-Eskimo</option>
+                        <option value="Other">Other</option>
+                        <option value="Black">Black</option>
+                    </select>
+
+                    <label for="sex">Sexo:</label>
+                    <select id="sex" name="sex" required>
+                        <option value="Female">Female</option>
+                        <option value="Male">Male</option>
+                    </select>
+
+                    <label for="country">País:</label>
+                    <select id="country" name="country" required>
+                        <option value="United-States">United-States</option>
+                        <option value="Cambodia">Cambodia</option>
+                        <option value="England">England</option>
+                        <option value="Puerto-Rico">Puerto-Rico</option>
+                        <option value="Canada">Canada</option>
+                        <option value="Germany">Germany</option>
+                        <option value="Outlying-US(Guam-USVI-etc)">Outlying-US(Guam-USVI-etc)</option>
+                        <option value="India">India</option>
+                        <option value="Japan">Japan</option>
+                        <option value="Greece">Greece</option>
+                        <option value="South">South</option>
+                        <option value="China">China</option>
+                        <option value="Cuba">Cuba</option>
+                        <option value="Iran">Iran</option>
+                        <option value="Honduras">Honduras</option>
+                        <option value="Philippines">Philippines</option>
+                        <option value="Italy">Italy</option>
+                        <option value="Poland">Poland</option>
+                        <option value="Jamaica">Jamaica</option>
+                        <option value="Vietnam">Vietnam</option>
+                        <option value="Mexico">Mexico</option>
+                        <option value="Portugal">Portugal</option>
+                        <option value="Ireland">Ireland</option>
+                        <option value="France">France</option>
+                        <option value="Dominican-Republic">Dominican-Republic</option>
+                        <option value="Laos">Laos</option>
+                        <option value="Ecuador">Ecuador</option>
+                        <option value="Taiwan">Taiwan</option>
+                        <option value="Haiti">Haiti</option>
+                        <option value="Columbia">Columbia</option>
+                        <option value="Hungary">Hungary</option>
+                        <option value="Guatemala">Guatemala</option>
+                        <option value="Nicaragua">Nicaragua</option>
+                        <option value="Scotland">Scotland</option>
+                        <option value="Thailand">Thailand</option>
+                        <option value="Yugoslavia">Yugoslavia</option>
+                        <option value="El-Salvador">El-Salvador</option>
+                        <option value="Trinadad&Tobago">Trinadad&Tobago</option>
+                        <option value="Peru">Peru</option>
+                        <option value="Hong">Hong</option>
+                        <option value="Holand-Netherlands">Holand-Netherlands</option>
+                    </select>
+                </div>
+            </div>
+            <input type="submit" value="Predecir">
+            <input type="button" value="Nueva Predicción" onclick="resetForm()">
+        </form>
+
+        <!-- Mostrar resultado -->
+        <div id="result-container" {% if not prediction_text %}style="display:none;" {% endif %}>
+            {% if prediction_text %}
+            <div class="result">
+                <p>{{ prediction_text }}</p>
+                <p>{{ probability_text }}</p>
+                <p>{{ message }}</p>
+            </div>
+            <div class="gif-container">
+                <iframe src="https://giphy.com/embed/67ThRZlYBvibtdF9JH" width="200" height="150" frameBorder="0"
+                    class="giphy-embed" allowFullScreen></iframe>
+                <p><a href="https://giphy.com/gifs/looneytunes-looney-tunes-bugs-bunny-pay-day-67ThRZlYBvibtdF9JH"></a>
+                </p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Mostrar mensaje de error -->
+        {% if error_message %}
+        <div class="error">
+            <p>{{ error_message }}</p>
+        </div>
+        {% endif %}
+    </div>
+</body>
+
+</html>
